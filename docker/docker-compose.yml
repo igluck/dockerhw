@@ -1,0 +1,31 @@
+version: '3'
+
+
+networks:
+  default:
+    driver: bridge
+
+
+services:
+  webserver:
+    build:
+      context: ../
+      dockerfile: ./docker/webserver/Dockerfile
+    ports:
+      - "8087:8080"
+    networks:
+      - default
+    depends_on:
+      - builder
+    links:
+      - builder
+    volumes:
+      - ../app:/app
+  builder:
+    build:
+      context: ../
+      dockerfile: ./docker/builder/Dockerfile
+    networks:
+      - default
+    volumes:
+      - ../app:/build/jenkins/war/target
